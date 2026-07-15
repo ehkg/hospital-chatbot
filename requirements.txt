@@ -1,3 +1,2 @@
-streamlit
 pandas
 openpyx1
