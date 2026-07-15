@@ -66,13 +66,22 @@ if symptom:
     converted_text = add_synonyms(symptom)
     user_words = set(converted_text.split())
 
-    # 사용자 입력과 데이터베이스 증상의 공통 단어 개수 계산
-    def calculate_score(database_symptom):
-        database_text = clean_text(database_symptom)
-        database_words = set(database_text.split())
+   # 사용자 입력과 데이터베이스 증상의 관련성 점수 계산
+def calculate_score(database_symptom):
+    database_text = clean_text(database_symptom)
+    database_words = set(database_text.split())
 
-        return len(user_words & database_words)
+    score = 0
 
+    # 엑셀의 증상 표현이 입력 문장 안에 포함되면 10점 추가
+    if database_text and database_text in converted_text:
+        score += 10
+
+    # 공통으로 포함된 단어 개수만큼 점수 추가
+    score += len(user_words & database_words)
+
+    return score
+    
     data["일치점수"] = data["증상"].apply(calculate_score)
 
     # 점수가 1점 이상인 결과만 남기고 높은 순서로 정렬
