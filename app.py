@@ -49,7 +49,7 @@ def add_synonyms(text):
 
 
 # 웹사이트 화면
-st.title("증상에 따른 진료과 추천")
+st.title("병원 추천 챗봇")
 
 st.write(
     "증상을 입력하면 관련성이 높은 진료과를 추천합니다."
