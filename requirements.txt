@@ -1,2 +1,2 @@
 pandas
-openpyx1
+openpyxl
