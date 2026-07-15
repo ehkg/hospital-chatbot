@@ -52,7 +52,7 @@ def add_synonyms(text):
 st.title("증상에 따른 진료과 추천")
 
 st.write(
-    "증상을 입력하면 관련성이 높은 진료과를 추천합니다. 
+    "증상을 입력하면 관련성이 높은 진료과를 추천합니다."
 )
 
 symptom = st.chat_input("예: 배가 아프고 열이 나요")
