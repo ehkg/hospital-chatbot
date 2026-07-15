@@ -62,6 +62,7 @@ symptom = st.chat_input("예: 배가 아프고 열이 나요")
 if symptom:
     with st.chat_message("user"):
         st.write(symptom)
+        
     converted_text = add_synonyms(symptom)
     user_words = set(converted_text.split())
 
