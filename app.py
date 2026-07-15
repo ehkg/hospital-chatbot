@@ -1,4 +1,4 @@
-import streamlit as st 
+import streamlit as st
 import pandas as pd
 import re
 
@@ -62,26 +62,26 @@ symptom = st.chat_input("예: 배가 아프고 열이 나요")
 if symptom:
     with st.chat_message("user"):
         st.write(symptom)
-        
+
     converted_text = add_synonyms(symptom)
     user_words = set(converted_text.split())
 
-   # 사용자 입력과 데이터베이스 증상의 관련성 점수 계산
-def calculate_score(database_symptom):
-    database_text = clean_text(database_symptom)
-    database_words = set(database_text.split())
+    # 사용자 입력과 데이터베이스 증상의 관련성 점수 계산
+    def calculate_score(database_symptom):
+        database_text = clean_text(database_symptom)
+        database_words = set(database_text.split())
 
-    score = 0
+        score = 0
 
-    # 엑셀의 증상 표현이 입력 문장 안에 포함되면 10점 추가
-    if database_text and database_text in converted_text:
-        score += 10
+        # 엑셀의 증상 표현이 입력 문장 안에 포함되면 10점 추가
+        if database_text and database_text in converted_text:
+            score += 10
 
-    # 공통으로 포함된 단어 개수만큼 점수 추가
-    score += len(user_words & database_words)
+        # 공통으로 포함된 단어 개수만큼 점수 추가
+        score += len(user_words & database_words)
 
-    return score
-    
+        return score
+
     data["일치점수"] = data["증상"].apply(calculate_score)
 
     # 점수가 1점 이상인 결과만 남기고 높은 순서로 정렬
@@ -111,9 +111,4 @@ def calculate_score(database_symptom):
 
 st.caption(
     "이 서비스는 진료과 선택을 돕기 위한 참고용이며 의료진의 진단을 대신하지 않습니다."
-) 
-
-
-
-
-
+)
