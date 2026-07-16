@@ -34,6 +34,7 @@ def normalize_text(text):
 
     # 기호 제거
     text = re.sub(r"[^가-힣a-z0-9\s]", " ", text)
+
     return text
 
 
@@ -70,22 +71,18 @@ if symptom:
 
     with st.chat_message("assistant"):
         if result.iloc[0]["일치점수"] > 0:
-            best_score = result.iloc[0]["일치점수"]
-            top_results = result[result["일치점수"] == best_score].head(3)
+            # 가장 높은 점수를 받은 결과 1개 선택
+            best_result = result.iloc[0]
 
             st.write("입력하신 증상과 관련성이 높은 진료과입니다.")
+            st.write(f"### {best_result['추천 진료과']}")
+            st.write(f"관련 증상: {best_result['증상']}")
 
-            for _, row in top_results.iterrows():
-                st.write(f"### {row['추천 진료과']}")
-                st.write(f"관련 증상: {row['증상']}")
-
-                if (
-                    "비고(병원급)" in data.columns
-                    and pd.notna(row["비고(병원급)"])
-                ):
-                    st.write(f"참고: {row['비고(병원급)']}")
-
-                st.divider()
+            if (
+                "비고(병원급)" in data.columns
+                and pd.notna(best_result["비고(병원급)"])
+            ):
+                st.write(f"참고: {best_result['비고(병원급)']}")
 
         else:
             st.write("관련된 증상을 찾지 못했습니다.")
