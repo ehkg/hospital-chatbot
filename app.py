@@ -5,6 +5,8 @@ import re
 
 st.title("병원 추천 챗봇")
 
+
+# 엑셀 파일 불러오기
 data = pd.read_excel("전신_증상_별_진료과_매칭_진짜최종.xlsx")
 data = data.fillna("")
 
@@ -44,17 +46,18 @@ def normalize_text(text):
     return text
 
 
+# 사용자 입력과 엑셀 증상의 관련성 점수 계산
 def calculate_score(user_text, symptom_text):
     user_text = normalize_text(user_text)
     symptom_text = normalize_text(symptom_text)
 
     score = 0
 
-    # 엑셀 증상 표현이 입력 문장 안에 들어 있으면 높은 점수
+    # 엑셀 증상 표현이 사용자 입력 안에 들어 있으면 10점 추가
     if symptom_text and symptom_text in user_text:
         score += 10
 
-    # 입력 문장의 단어가 증상 설명과 겹치면 점수 추가
+    # 공통으로 포함된 단어 개수만큼 점수 추가
     user_words = set(user_text.split())
     symptom_words = set(symptom_text.split())
 
@@ -63,25 +66,32 @@ def calculate_score(user_text, symptom_text):
     return score
 
 
-st.write("증상을 입력하면 관련성이 높은 진료과를 추천합니다.")
+st.write(
+    "증상을 입력하면 관련성이 높은 진료과를 추천합니다."
+)
 
 symptom = st.chat_input("예: 배가 아프고 열이 나요")
 
 
 if symptom:
-    # 사용자가 입력한 질문을 화면에 표시
+    # 사용자가 입력한 문장 표시
     with st.chat_message("user"):
         st.write(symptom)
 
+    # 모든 증상과 관련성 점수 비교
     data["일치점수"] = data["증상"].apply(
         lambda x: calculate_score(symptom, x)
     )
 
-    result = data.sort_values("일치점수", ascending=False)
+    # 점수가 높은 순서대로 정렬
+    result = data.sort_values(
+        "일치점수",
+        ascending=False
+    )
 
     with st.chat_message("assistant"):
         if result.iloc[0]["일치점수"] > 0:
-            # 가장 높은 점수를 받은 결과 1개
+            # 가장 높은 점수를 받은 결과 1개 선택
             best_result = result.iloc[0]
 
             st.write("입력하신 증상과 관련성이 높은 진료과입니다.")
